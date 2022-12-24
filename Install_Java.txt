@@ -1,0 +1,27 @@
+#! /bin/bash
+
+#step 1- install java
+yum install java-11-openjdk* -y
+
+#step 2- Set up Env variable
+v_javabase=/usr/lib/jvm
+cd $v_javabase
+
+v_java=$(ls -ld java-11-openjdk-11.0.17.0.8-2.el9_0.x86_64*|awk '{print $9}')
+
+grep JAVA_HOME $HOME/.bash_profile >> /dev/null
+if [ $? -ne 0 ]; then
+        cp $HOME/.bash_profile $HOME/.bash_profile-bkp
+        echo "export JAVA_HOME=$v_javabase/$v_java" >> $HOME/.bash_profile
+        echo 'export PATH=$JAVA_HOME/bin:$PATH' >> $HOME/.bash_profile
+
+        source $HOME/.bash_profile
+
+        #step 3: setup correct java version in os
+        echo 2 | alternatives --config java
+        echo ""
+        echo ""
+        echo "Java Installed Successfully"
+else
+        echo "Java already installed"
+fi
